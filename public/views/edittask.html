@@ -1,0 +1,234 @@
+<script>
+  $(function() {
+    $("#due_date").datepicker({
+      autoclose: true,
+      format: "M d, yyyy",
+      closeOnDateSelect: true
+    });
+    $(".glyphicon-calendar").click(function() {
+      $("#due_date").focus();
+    });
+    $("#updated_due_date").datepicker({
+      autoclose: true,
+      format: "M d, yyyy",
+      closeOnDateSelect: true
+    });
+    $(".edit.glyphicon-calendar").click(function() {
+      $("#updated_due_date").focus();
+    });
+  });
+</script>
+<div class="jumbotron text-center">
+  <h1>Edit Taks</h1>
+  <p>To add or update taks. Check everyday before sleep</p>
+
+  <div class="tasks-editor">
+    <button class="btn btn-lg btn-primary" id="add">Add A New Task</button>
+
+    <div id="task_modal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" id="new_task_close">&times;</span>
+        <p class="form-title">New Task</p>
+        <form class="new-task-form" method="post" name="task_form">
+          <div
+            class="task-title form-group"
+            ng-class="{ 'error': task_form.task_title.$invalid && task_form.task_title.$touched,
+          'success': task_form.task_title.$valid && new_task.title }"
+          >
+            <label
+              class="task-title-label col-sm-3 col-form-label col-form-label-sm"
+              >Task Title *</label
+            >
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                ng-model="new_task.task_title"
+                required
+                name="task_title"
+                placeholder="Enter your new task title"
+              />
+              <div
+                class="error-message-box text-left"
+                ng-if="task_form.task_title.$invalid && task_form.task_title.$touched"
+              >
+                <label class="task-title-msg col-form-label col-form-label-sm"
+                  >New task title is required</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="task-details form-group shadow-textarea">
+            <label
+              class="task-title-label col-sm-3 col-form-label col-form-label-sm"
+              >Task Details</label
+            >
+            <div class="col-sm-8">
+              <textarea
+                class="form-control z-depth-1 form-control-sm"
+                ng-model="new_task.details"
+                rows="4"
+                placeholder="Description about your new task"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="task-detail-time form-group shadow-textarea">
+            <label
+              class="task-title-label col-sm-3 col-form-label col-form-label-sm"
+              >Due Time</label
+            >
+            <div class="input-group date col-sm-8">
+              <input
+                id="due_date"
+                class="form-control form-control-sm"
+                type="text"
+                data-date-format="mm-dd-yyyy"
+                readonly
+              />
+              <span class="input-group-addon"
+                ><i class="glyphicon glyphicon-calendar"></i
+              ></span>
+            </div>
+          </div>
+        </form>
+        <div class="task-add">
+          <button
+            class="btn btn-primary"
+            type="button"
+            ng-disabled="task_form.$invalid"
+            ng-click="add_task('task_form')"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="all-tasks">
+  <h2 class="text-center">All Tasks</h2>
+  <table class="col-sm-11">
+    <thead>
+      <tr>
+        <th scope="col col-sm-6">Task Title</th>
+        <th scope="col col-sm-2">Due Time</th>
+        <th scope="col col-sm-1">Remove</th>
+        <th scope="col col-sm-1" id="edit">Edit Task</th>
+        <th scope="col col-sm-1">Finish</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="toDo in toDos" class="todo-item">
+        <td class="todo-col">{{toDo.title}}</td>
+        <td class="date-col">{{toDo.due_date | date:'MMM dd, yyyy'}}</td>
+        <td class="delete-col">
+          <i class="fa fa-trash-o fa-2x" ng-click="removeToDo(toDo)"></i>
+        </td>
+        <td class="delete-col">
+          <i
+            class="fa fa-pencil-square-o fa-2x"
+            ng-click="updateToDo(toDo)"
+          ></i>
+        </td>
+        <td class="delete-col">
+          <i
+            ng-show="toDo.finish"
+            class="fa fa-check-circle fa-2x"
+            style="color:green"
+          ></i>
+          <i
+            ng-show="!toDo.finish"
+            class="fa fa-check-circle fa-2x"
+            ng-click="finish(toDo)"
+          ></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="edit_task_modal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close" id="edit_task_close">&times;</span>
+      <p class="form-title">Edit Task</p>
+      <form class="new-task-form" method="post" name="edit_task_form">
+        <div
+          class="task-title form-group"
+          ng-class="{ 'error': edit_task_form.task_title.$invalid && edit_task_form.task_title.$touched,
+          'success': edit_task_form.task_title.$valid && update_task.title }"
+        >
+          <label
+            class="task-title-label col-sm-3 col-form-label col-form-label-sm"
+            >Task Title *
+          </label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              ng-model="edit_task.title"
+              required
+              name="task_title"
+            />
+            <div
+              class="error-message-box text-left"
+              ng-if="edit_task_form.task_title.$invalid && edit_task_form.task_title.$touched"
+            >
+              <label class="task-title-msg col-form-label col-form-label-sm"
+                >Task title is required</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="task-details form-group shadow-textarea">
+          <label
+            class="task-title-label col-sm-3 col-form-label col-form-label-sm"
+            >Task Details</label
+          >
+          <div class="col-sm-8">
+            <textarea
+              class="form-control z-depth-1 form-control-sm"
+              ng-model="edit_task.details"
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="task-detail-time form-group shadow-textarea">
+          <label
+            class="task-title-label col-sm-3 col-form-label col-form-label-sm"
+            >Due Time</label
+          >
+          <div class="input-group date col-sm-8">
+            <input
+              id="updated_due_date"
+              class="form-control form-control-sm"
+              type="text"
+              data-date-format="mm-dd-yyyy"
+              readonly
+            />
+            <span class="input-group-addon"
+              ><i class="edit glyphicon glyphicon-calendar"></i
+            ></span>
+          </div>
+        </div>
+      </form>
+      <div class="task-add" ng-if="!edit_task.finish">
+        <button
+          class="btn btn-primary"
+          type="button"
+          ng-disabled="edit_task_form.$invalid"
+          ng-click="update_task(edit_task)"
+        >
+          Update
+        </button>
+      </div>
+      <div class="task-add" ng-if="edit_task.finish">
+        <button class="btn btn-success" type="button">
+          Finished
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

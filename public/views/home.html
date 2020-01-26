@@ -1,0 +1,56 @@
+<!-- public/views/home.html -->
+
+<div class="jumbotron text-center">
+  <h1 class="home-title">Today's Tasks</h1>
+  <h4 class="home-subtitle">Due Time: {{today_tasks.deal_time}}</h4>
+  <h3 class="home-title-1" newlines="false" ng-bind="today_tasks.meme"></h3>
+
+  <div class="time-countdown row">
+    <div class="col-sm-12 col-md-2"></div>
+    <div class="col-sm-12 col-md-8 time">
+      <div class="countdown">
+        <ul class="countdown-list">
+          <li>
+            <span class="countdown-timestamp" id="days"> </span>
+            <span class="time-ref">Days</span>
+          </li>
+          <li>
+            <span class="countdown-timestamp" id="hours"> </span>
+            <span class="time-ref">Hours</span>
+          </li>
+          <li>
+            <span class="countdown-timestamp" id="minutes"> </span>
+            <span class="time-ref">Minutes</span>
+          </li>
+          <li>
+            <span class="countdown-timestamp" id="seconds"> </span>
+            <span class="time-ref">Seconds</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-2"></div>
+  </div>
+</div>
+<div class="daily-task-lists">
+  <div class="col-sm-4 col-xs-6 flip-box" ng-repeat="task in today_tasks.tasks">
+    <div class="flip-card">
+      <div class="flip flipbox-front">
+        <div class="flipbox-content title">
+          <p ng-bind="task.title"></p>
+        </div>
+      </div>
+      <div class="flip flipbox-back">
+        <div class="flipbox-content details">
+          <p ng-bind="task.details"></p>
+        </div>
+        <div ng-show="!task.finish" class="task-finish">
+          <button class="btn" ng-click="finish_task(task)">Finish</button>
+        </div>
+        <div ng-show="task.finish" class="task-finish">
+          <button class="btn btn-success">Finished</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
