@@ -52,6 +52,12 @@ angular
           details:
             "Keep coding everyday and update on github, improve efficiency",
           finish: false
+        },
+        {
+          title: "Learning for 2 hrs (JS, FED, DS, etc..)",
+          details:
+            "Keep coding everyday and update on github, improve efficiency",
+          finish: false
         }
       ]
     };
